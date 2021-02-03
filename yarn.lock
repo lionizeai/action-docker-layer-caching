@@ -4,7 +4,7 @@
 
 "@actions/cache@^1.0.6":
   version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@actions/cache/-/cache-1.0.6.tgz"
+  resolved "https://registry.yarnpkg.com/@actions/cache/-/cache-1.0.6.tgz#96000547577d4b915188e1c8e68e431e52c86ffc"
   integrity sha512-c8CSJS6uCatX07VHazgvL4XPMpTdawOyyD+OCThRE0v486lqThYa4tayRqTyl6FSyD5LclQyB8/FQlZ5cxTNJA==
   dependencies:
     "@actions/core" "^1.2.6"
