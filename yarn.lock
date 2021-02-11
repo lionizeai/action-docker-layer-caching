@@ -5123,6 +5123,16 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
+typescript-is@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/typescript-is/-/typescript-is-0.17.1.tgz#d1308dc9a318cc800fc86ec4843a4c8f853a17f7"
+  integrity sha512-RIz2hSJO5LPh5URMMf+5BTES+kfggk47qQ+Jez0Vg02LYT499OHsHr3V+GUsmvrkWQKd3Jgu6qo3C9Jz2N4wLQ==
+  dependencies:
+    nested-error-stacks "^2"
+    tsutils "^3.17.1"
+  optionalDependencies:
+    reflect-metadata ">=0.1.12"
+
 typescript@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.3.tgz"
