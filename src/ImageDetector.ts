@@ -1,20 +1,35 @@
-import * as exec from 'actions-exec-listener'
 import * as core from '@actions/core'
+
+import {CommandHelper} from './CommandHelper'
 
 export class ImageDetector {
   async getExistingImages(): Promise<string[]> {
-    const existingSet = new Set<string>([])
-    const ids = (await exec.exec(`docker image ls -q`, [], { silent: true, listeners: { stderr: console.warn }})).stdoutStr.split(`\n`).filter(id => id !== ``)
-    const repotags = (await exec.exec(`docker`, `image ls --format {{.Repository}}:{{.Tag}} --filter dangling=false`.split(' '), { silent: true, listeners: { stderr: console.warn }})).stdoutStr.split(`\n`).filter(id => id !== ``);
-    core.debug(JSON.stringify({ log: "getExistingImages", ids, repotags }));
-    ([...ids, ...repotags]).forEach(image => existingSet.add(image))
-    core.debug(JSON.stringify({ existingSet }))
-    return Array.from(existingSet)
+    core.debug(`Existing Images:`)
+    const _filter = core.getInput(`filter`)
+    const filter = _filter ? `--filter=${_filter}` : ''
+    const cmd = new CommandHelper(process.cwd(), `docker`, [
+      'image',
+      'ls',
+      '--format={{.ID}} {{.Repository}}:{{.Tag}}',
+      '--filter=dangling=false',
+      filter
+    ])
+    const existingImages = new Set<string>()
+    const output = await cmd.exec()
+    const images = output.stdout.split('\n').filter(key => key !== ``)
+    for (const image of images) {
+      const [key, value] = image.split(' ')
+      existingImages.add(key)
+      existingImages.add(value)
+    }
+
+    return Array.from(existingImages)
   }
 
-  async getImagesShouldSave(alreadRegisteredImages: string[]): Promise<string[]> {
-    const resultSet = new Set(await this.getExistingImages())
-    alreadRegisteredImages.forEach(image => resultSet.delete(image))
-    return Array.from(resultSet)
+  async getImagesShouldSave(
+    alreadyRegisteredImages: string[]
+  ): Promise<string[]> {
+    const resultSet = await this.getExistingImages()
+    return resultSet.filter(item => alreadyRegisteredImages.indexOf(item) < 0)
   }
 }
